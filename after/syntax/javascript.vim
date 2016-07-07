@@ -35,6 +35,16 @@ syntax cluster javascriptExpression            add=javascriptAsyncFuncKeyword
 
 syntax match   javascriptOpSymbol              contained /\(::\)/ nextgroup=@javascriptExpression,javascriptInvalidOp skipwhite skipempty " 1
 
+" Flow
+syntax region  flowBlockTypeAnnotation      contained start=/:/ end=/{/me=s-1 contains=@flowType,flowColon nextgroup=javascriptBlock skipwhite skipempty
+syntax cluster flowType                     contains=flowKeyword,javascriptIdentifierName,flowPolymorphicType
+syntax match   flowColon                    contained /:/
+syntax match   flowBrackets                 contained /[<>]/
+syntax region  flowPolymorphicType          contained matchgroup=flowBrackets start=/</ end=/>/ contains=@flowType
+syntax keyword flowKeyword                  contained any boolean mixed number string void
+
+syntax region  javascriptFuncArg            contained matchgroup=javascriptParens start=/(/ end=/)/ contains=javascriptFuncKeyword,javascriptFuncComma,javascriptDefaultAssign,@javascriptComments nextgroup=flowBlockTypeAnnotation,javascriptBlock skipwhite skipwhite skipempty
+
 if exists("did_javascript_hilink")
   HiLink javascriptDecorator           Statement
   HiLink javascriptDecoratorFuncName   Statement
@@ -44,6 +54,11 @@ if exists("did_javascript_hilink")
   HiLink javascriptClassProperty       Normal
 
   HiLink javascriptAsyncFuncKeyword    Keyword
+
+  " Flow
+  HiLink flowBrackets                  Operator
+  HiLink flowColon                     Operator
+  HiLink flowKeyword                   Keyword
 
   delcommand HiLink
   unlet did_javascript_hilink
