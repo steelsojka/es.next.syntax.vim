@@ -42,6 +42,7 @@ syntax match   flowColon                    contained /:/
 syntax match   flowBrackets                 contained /[<>]/
 syntax region  flowPolymorphicType          contained matchgroup=flowBrackets start=/</ end=/>/ contains=@flowType
 syntax keyword flowKeyword                  contained any boolean mixed number string void
+syntax match   flowClassProperty            contained containedin=javascriptClassBlock /[a-zA-Z_$]\k*:\s*/ nextgroup=@flowType,@javascriptExpression skipwhite skipempty
 
 syntax region  javascriptFuncArg            contained matchgroup=javascriptParens start=/(/ end=/)/ contains=javascriptFuncKeyword,javascriptFuncComma,javascriptDefaultAssign,@javascriptComments nextgroup=flowBlockTypeAnnotation,javascriptBlock skipwhite skipwhite skipempty
 
@@ -59,6 +60,9 @@ if exists("did_javascript_hilink")
   HiLink flowBrackets                  Operator
   HiLink flowColon                     Operator
   HiLink flowKeyword                   Keyword
+  HiLink flowClassProperty             Normal 
+
+  HiLink flowFuncArg                   Normal 
 
   delcommand HiLink
   unlet did_javascript_hilink
